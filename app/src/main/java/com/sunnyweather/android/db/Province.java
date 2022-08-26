@@ -2,7 +2,7 @@ package com.sunnyweather.android.db;
 
 import org.litepal.crud.LitePalSupport;
 
-public class ProVince extends LitePalSupport {
+public class Province extends LitePalSupport {
 
     private int id;
     private String provinceName;
