@@ -50,6 +50,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView carWashText;
     private TextView sportText;
     public ImageView bingPicImg;
+    private String mWeatherId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,17 +96,17 @@ public class WeatherActivity extends AppCompatActivity {
         final String weatherId;
         if (weatherString != null) {//有缓存时，直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString);
-            weatherId = weather.basic.weatherId;
+            mWeatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
         } else {
-            weatherId = getIntent().getStringExtra("weather_id");
+            mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);//无缓存，将ScrollView隐藏
-            requestWeather(weatherId);
+            requestWeather(mWeatherId);
         }
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestWeather(weatherId);
+                requestWeather(mWeatherId);
             }
         });
 
@@ -134,6 +135,7 @@ public class WeatherActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();//文件存储
                             editor.putString("weather", responseText);
                             editor.apply();
+                            mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
                         } else {
                             Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
